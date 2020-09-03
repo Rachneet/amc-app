@@ -1,9 +1,54 @@
 html, body {
-  background: url('gender.jpg') center center no-repeat;
+  background: url('signals-repository.img.jpg') center center no-repeat;
   background-size: cover;
+    background-attachment: scroll;
   color: white;
   height: 100%;
   width: 100%;
+}
+
+.Title {
+
+  width: 100%;
+  display: flex;
+    flex-grow: 1;
+    align-items: stretch;
+  justify-content: center;
+  padding: 0em;
+  margin-bottom: 2em;
+    opacity: 0.9;
+  background-color: #E06633;
+  color: #fff;
+}
+
+th {
+    background-color: #1f77b4;
+    color: white;
+}
+
+.row-elements{
+    width: 200%;
+}
+
+
+
+.progress {
+    margin-top: 1em;
+    margin-bottom: 1em;
+}
+
+.alert-warning {
+
+    margin-top: 1em;
+}
+
+
+.alert-button{
+    margin-top: 1em;
+}
+
+.table{
+    color: #ffffff;
 }
 
 .content {
@@ -12,7 +57,6 @@ html, body {
   width: 60%;
   height: auto;
   background-color: #fff;
-  opacity: 0.7;
   padding: 20px;
   border-radius: 8px;
 }
@@ -48,17 +92,80 @@ label {
 .form-control {
   background-color: #fff;
   width: 50% !important;
-  opacity: 0.7;
 }
 
-.result-container {
+.container {
   text-align: center;
-  font-weight: 600;
-  font-size: 4em;
-  letter-spacing: 0.15rem;
-  padding: 20px 0 0;
+  margin: 0 auto;
 }
 
 #result {
   color: white;
+}
+
+.center {
+    justify-content: center;
+    align-items: center;
+    /*margin: 0 auto;  !*for centering*!*/
+}
+
+.upload-label{
+    color: white;
+    align-self: center;
+     background-color: black;
+    display: flex;
+     position: relative;
+    justify-content: center;
+}
+
+
+/* upload file styling */
+
+.files input {
+    outline: 2px dashed #92b0b3;
+    outline-offset: -10px;
+    -webkit-transition: outline-offset .15s ease-in-out, background-color .15s linear;
+    transition: outline-offset .15s ease-in-out, background-color .15s linear;
+    padding: 120px 0px 90px 40.5%;
+    text-align: center !important;
+    margin: 0;
+    width: 100% !important;
+}
+.files input:focus{     outline: 2px dashed #92b0b3;  outline-offset: -10px;
+    -webkit-transition: outline-offset .15s ease-in-out, background-color .15s linear;
+    transition: outline-offset .15s ease-in-out, background-color .15s linear; border:1px solid #92b0b3;
+ }
+.files{ position:relative}
+.files:after {  pointer-events: none;
+    position: absolute;
+    top: 60px;
+    left: 0;
+    width: 50px;
+    right: 0;
+    height: 56px;
+    content: "";
+    background-image: url(https://image.flaticon.com/icons/png/128/109/109612.png);
+    display: block;
+    margin: 0 auto;
+    background-size: 100%;
+    background-repeat: no-repeat;
+}
+
+.color input{ background-color:#000000;}
+.files:before {
+    position: absolute;
+    top: 190px;
+    bottom: 0;
+    left: 10px;
+    pointer-events: none;
+    width: 100%;
+    right: 0;
+    height: 57px;
+    content: " or drag it here. ";
+    display: block;
+    margin: 0 auto;
+    color: #ffffff;
+    font-weight: 400;
+
+    text-align: center;
 }
