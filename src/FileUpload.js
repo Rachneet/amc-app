@@ -12,8 +12,6 @@ import Title from './Title'
 import schema from './schema';
 import Table from './Table';
 import './App.css'
-import { MDBDataTable } from 'mdbreact';
-import ReactTable from 'react-table';
 import BootstrapTable from 'react-bootstrap-table-next';
 import paginationFactory from 'react-bootstrap-table2-paginator';
 
@@ -34,7 +32,6 @@ const FileUpload = () => {
 
   const onSubmit = async e => {
     e.preventDefault();
-    let result = {};
     const formData = new FormData();
     formData.append('file', file);
     setIsLoading(true);
@@ -61,8 +58,8 @@ const FileUpload = () => {
 
           // setUploadedFile({fileName, filePath});
 
-          setMessage('File Uploaded')
-          setIsLoading(false)
+          setMessage('File Uploaded');
+          setIsLoading(false);
 
       } catch (err) {
           if (err.response.status === 500) {
@@ -181,12 +178,6 @@ const FileUpload = () => {
                  </Row>
 
              </Form>
-
-               <div id="container">
-
-
-
-			</div>
 
 
            </div>

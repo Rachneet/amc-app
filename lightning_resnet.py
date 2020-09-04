@@ -1,32 +1,14 @@
 import pytorch_lightning as pl
 import torch
-import torch.nn as nn
 import numpy as np
-import random
-from torch.nn import functional as F
 from torch.utils.data import DataLoader, SequentialSampler, Subset, Dataset
-from sklearn import preprocessing
-import time
 from torch.utils.data.sampler import SubsetRandomSampler
-import h5py as h5
+# import h5py as h5
 import math
-import os
-from pytorch_lightning import Trainer
 from argparse import ArgumentParser
-# from test_tube import Experiment
-# from comet_ml import Experiment
-# from pytorch_lightning.logging import CometLogger
-# from pytorch_lightning.loggers import TestTubeLogger
-from pytorch_lightning.logging.neptune import NeptuneLogger
 from sklearn import metrics
-from collections import OrderedDict
-import csv
-# from scikitplot.metrics import plot_confusion_matrix
-# import matplotlib.pyplot as plt
-from argparse import Namespace
 torch.manual_seed(4)  # for reproducibility of results
 
-from sklearn.decomposition import FastICA
 from sklearn.exceptions import ConvergenceWarning
 import warnings
 warnings.simplefilter('always',ConvergenceWarning)
@@ -46,36 +28,36 @@ from resnet import *
 # ====================================================================================================================
 
 
-class DatasetFromHDF5(Dataset):
-    def __init__(self, filename, iq,labels,snrs):
-        self.filename = filename
-        self.iq = iq
-        self.labels = labels
-        self.snrs = snrs
-        # self.data = preprocessing.scale(self.data, with_mean=False)
-
-    def __len__(self):
-        with h5.File(self.filename, 'r') as file:
-            lens = len(file[self.labels])
-        return lens
-
-    def __getitem__(self, item):
-        with h5.File(self.filename, 'r') as file:
-            data = file[self.iq][item]
-            label = file[self.labels][item]
-            snr = file[self.snrs][item]
-        # ----------- Blind source separation ------------------------
-        # x = np.expand_dims(data, axis=0)
-        # x = x.reshape(-1, 256)
-        # S = compute_ica(x)
-        # out = np.dot(S, x)
-        # signals = out.reshape(-1, 128, 2)
-        # -------------------------------------------------------------
-        # data = preprocessing.scale(data,with_mean=False).astype(np.float32)
-        data = data.astype(np.float32)
-        label = label.astype(np.float32)
-        snr = snr.astype(np.int8)
-        return data,label,snr
+# class DatasetFromHDF5(Dataset):
+#     def __init__(self, filename, iq,labels,snrs):
+#         self.filename = filename
+#         self.iq = iq
+#         self.labels = labels
+#         self.snrs = snrs
+#         # self.data = preprocessing.scale(self.data, with_mean=False)
+#
+#     def __len__(self):
+#         with h5.File(self.filename, 'r') as file:
+#             lens = len(file[self.labels])
+#         return lens
+#
+#     def __getitem__(self, item):
+#         with h5.File(self.filename, 'r') as file:
+#             data = file[self.iq][item]
+#             label = file[self.labels][item]
+#             snr = file[self.snrs][item]
+#         # ----------- Blind source separation ------------------------
+#         # x = np.expand_dims(data, axis=0)
+#         # x = x.reshape(-1, 256)
+#         # S = compute_ica(x)
+#         # out = np.dot(S, x)
+#         # signals = out.reshape(-1, 128, 2)
+#         # -------------------------------------------------------------
+#         # data = preprocessing.scale(data,with_mean=False).astype(np.float32)
+#         data = data.astype(np.float32)
+#         label = label.astype(np.float32)
+#         snr = snr.astype(np.int8)
+#         return data,label,snr
 
 # ===============================================MODEL==============================================================
 
@@ -257,34 +239,34 @@ class LightningResnet(pl.LightningModule):
         return result
 
 
-    def prepare_data(self, valid_fraction=0.05, test_fraction=0.2):
-        dataset = DatasetFromHDF5(self.hparams.data_path, 'iq', 'labels', 'snrs')
-        num_train = len(dataset)
-        indices = list(range(num_train))
-        val_split = int(math.floor(valid_fraction * num_train))
-        test_split = val_split + int(math.floor(test_fraction * num_train))
-        training_params = {"batch_size": self.hparams.batch_size,
-                           "num_workers": self.hparams.num_workers}
-
-        if not ('shuffle' in training_params and not training_params['shuffle']):
-            np.random.seed(4)
-            np.random.shuffle(indices)
-        if 'num_workers' not in training_params:
-            training_params['num_workers'] = 1
-
-        train_idx, valid_idx, test_idx = indices[test_split:], indices[:val_split], indices[val_split:test_split]
-        train_sampler = SubsetRandomSampler(train_idx)
-        valid_sampler = SubsetRandomSampler(valid_idx)
-        test_sampler = SubsetRandomSampler(test_idx)
-        self.train_dataset = DataLoader(dataset, batch_size=self.hparams.batch_size,
-                                   shuffle=self.hparams.shuffle,num_workers=self.hparams.num_workers,
-                                   sampler=train_sampler)
-        self.val_dataset = DataLoader(dataset, batch_size=self.hparams.batch_size,
-                                 shuffle=self.hparams.shuffle,num_workers=self.hparams.num_workers,
-                                 sampler=valid_sampler)
-        self.test_dataset = DataLoader(dataset, batch_size=self.hparams.batch_size,
-                                  shuffle=self.hparams.shuffle, num_workers=self.hparams.num_workers,
-                                  sampler=test_sampler)
+    # def prepare_data(self, valid_fraction=0.05, test_fraction=0.2):
+    #     dataset = DatasetFromHDF5(self.hparams.data_path, 'iq', 'labels', 'snrs')
+    #     num_train = len(dataset)
+    #     indices = list(range(num_train))
+    #     val_split = int(math.floor(valid_fraction * num_train))
+    #     test_split = val_split + int(math.floor(test_fraction * num_train))
+    #     training_params = {"batch_size": self.hparams.batch_size,
+    #                        "num_workers": self.hparams.num_workers}
+    #
+    #     if not ('shuffle' in training_params and not training_params['shuffle']):
+    #         np.random.seed(4)
+    #         np.random.shuffle(indices)
+    #     if 'num_workers' not in training_params:
+    #         training_params['num_workers'] = 1
+    #
+    #     train_idx, valid_idx, test_idx = indices[test_split:], indices[:val_split], indices[val_split:test_split]
+    #     train_sampler = SubsetRandomSampler(train_idx)
+    #     valid_sampler = SubsetRandomSampler(valid_idx)
+    #     test_sampler = SubsetRandomSampler(test_idx)
+    #     self.train_dataset = DataLoader(dataset, batch_size=self.hparams.batch_size,
+    #                                shuffle=self.hparams.shuffle,num_workers=self.hparams.num_workers,
+    #                                sampler=train_sampler)
+    #     self.val_dataset = DataLoader(dataset, batch_size=self.hparams.batch_size,
+    #                              shuffle=self.hparams.shuffle,num_workers=self.hparams.num_workers,
+    #                              sampler=valid_sampler)
+    #     self.test_dataset = DataLoader(dataset, batch_size=self.hparams.batch_size,
+    #                               shuffle=self.hparams.shuffle, num_workers=self.hparams.num_workers,
+    #                               sampler=test_sampler)
 
 
     @pl.data_loader
