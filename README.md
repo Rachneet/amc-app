@@ -1,6 +1,5 @@
-# react-flask-heroku
-Simple bootstrapping code to get you started with a React frontend and Flask backend ready to deploy to Heroku.
-
+# Signal Modulation Prediction
+A web app to predict the modulation of mobile radio signals.
 ## Dependencies
 
 python3, npm, Heroku CLI
@@ -15,18 +14,12 @@ python3, npm, Heroku CLI
 1. `npm run build`
 2. `heroku local`
 
-The application will be running at http://localhost:5000.
-
-## Deploying
-
-First, create your app on Heroku. Then:
-
-1. `heroku git:remote -a {YOUR_APP_NAME}`
-2. `heroku buildpacks:set heroku/python`
-3. `heroku buildpacks:add --index 1 heroku/nodejs`
-4. `git push heroku master`
+The application will be running at http://ec2-52-14-114-86.us-east-2.compute.amazonaws.com/.
 
 ## Project Structure
 
 * Flask server is at `app.py`
 * React components in `src/`
+
+
+
