@@ -23,5 +23,9 @@ The application is deployed at http://ec2-52-14-114-86.us-east-2.compute.amazona
 * Flask server is at `app.py`
 * React components in `src/`
 
+## Screenshot
+
+![alt text](https://github.com/Rachneet/amc-app/blob/master/app_screenshot.PNG?raw=true)
+
 
 
